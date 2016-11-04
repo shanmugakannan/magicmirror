@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Magic Mirror</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script>
+  var socket = io();
+	$('form').submit(function(){
+    socket.emit('chat message', $('#m').val());
+    $('#m').val('');
+    return false;
+  });
+  socket.on('chat message', function(msg){
+    $('#messages').append($('<li>').text(msg));
+  });
+  </script>
+  <style>
+                                h1{
+                                                font-size:
+                                }
+                                h2{
+                                                font-size:75px;
+                                }
+                                h3{
+                                                font-size:50px;
+                                }
+                                h4{
+                                                font-size: 30px;
+                                }
+                                h5{
+                                                font-size: 25px;
+                                }
+                                
+                                .container-fluid{
+                                                padding-left:0;
+                                                padding-right:0;
+                                }
+                                
+                                body{
+                                                background:black;
+                                    position: absolute;
+                                                top: 0px;
+                                                bottom: 0px;
+                                                left: 0px;
+                                                right: 0px;
+                                                color:#fff;
+                                }
+                                .header{
+                                                position:fixed;
+                                                width :100%;
+                                                margin-top: 50px;
+                                                margin-left: 50px;
+                                                z-index:10;
+                                }
+                                .footer{
+                                                bottom: 0px;
+                                                position: fixed;
+                                                width: 100%;
+                                                z-index:10;
+                                }
+                                .welcome-sec{  
+                                                
+                                }
+                                
+                                .welcome-sec h2{
+                                                margin-top:0px;
+                                }
+                                .notification-sec{
+                                                display: inline-block;
+                                                float: right;
+                                                width: 500px;
+                                                margin-right: 50px;
+                                                margin-top: 50px;                            }
+                                .notification-sec ul{
+                                                list-style-type:none;
+                                                border-left:1px solid #fff;
+                                                padding-left:10px;
+
+                                }
+                                .notification-sec ul li{
+                                                font-size:20px;
+                                }
+                                .weather-sec{
+                                                display: inline-block;
+                                                float: right;
+                                                width: 250px;
+                                                margin-right: 50px;
+                                                margin-bottom: 50px;
+                                }
+                                .date-sec{
+                                                margin-bottom: 50px;
+                                                margin-left: 50px;
+                                                
+                                }
+                                
+                                p {
+                                                margin: 0 0 5px 0;
+                                }
+                                
+                                .video-sec{
+                                                position: fixed;
+                                                width: 100%;
+                                }
+                                .video-sec .overlay{
+                                                width: 100%;
+                                                height: 100%;
+                                                background-color: rgba(0,0,0,.4);
+                                                position: absolute;
+                                                z-index:1;
+                                }
+                                video {
+                                                background-color: #000;
+                                                width: 100%;
+                                                height: 100%;
+                                }
+                                
+  </style>
+</head>
+<body>
+
+                <div class="container-fluid">
+                                
+                                <div class="video-sec">
+                                                <div class="overlay"></div>
+                                                <video autoplay></video>
+                                                
+                                </div>
+                                <div class="row header">
+                                                <div class="col-sm-6 ">
+                                                                <div class="welcome-sec">
+                                                                                <h3>Good Evening,</h3>
+                                                                                <h2>Midhun</h2>
+                                                                </div>
+                                                </div>
+                                                <div class="col-sm-6 ">
+                                                                <div class="notification-sec">
+                                                                                <h5>Agenda</h5>
+                                                                                <ul class="">
+                                                                                                <li>9am meeting with Steve</li>
+                                                                                                <li>12pm lunch with mom</li>
+                                                                                                <li>7pm demo</li>
+                                                                                </ul>
+                                                                </div>
+                                                </div>
+                                </div>
+                                <div class="row footer">
+                                                <div class="col-sm-6 ">
+                                                                <div class="date-sec">
+                                                                                <h4>Sat, Jan 24th</h4>
+                                                                                <h4>1:30pm</h4>
+                                                                </div>
+                                                </div>
+                                                <div class="col-sm-6 ">
+                                                                <div class="weather-sec">
+                                                                                <h4>72 deg Rainy</h4>
+                                                                </div>
+                                                </div>
+                                </div>
+                </div>
+
+                <script>
+                                var video = document.getElementsByTagName('video')[0],
+                                                canvas = document.createElement('canvas'),
+                                                context = canvas.getContext('2d'),
+                                                frames = [],
+                                                task = null;
+
+                                function init() {
+                                                console.log('init');
+                                                try {
+                                                                navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+                                                } catch (e) {
+                                                                window.alert('Your browser does not support WebVideo, try Google Chrome');
+                                                }
+                                                if (navigator.getUserMedia) {
+                                                                navigator.getUserMedia({video: true}, function (stream) {
+                                                                                console.log('stream', stream);
+                                                                                video.src = window.URL.createObjectURL(stream);
+                                                                }, function (e) {
+                                                                                window.alert('Please enable your webcam to begin recording');
+                                                                });
+                                                } else {
+                                                                window.alert('Your browser does not support recording, try Google Chrome');
+                                                }
+                                }
+
+                                function captureFrame(time) {
+                                                task = requestAnimationFrame(captureFrame);
+                                                context.drawImage(video, 0, 0, 320, 240);
+                                                frames.push(canvas.toDataURL('image/webp', 1)); // image/jpeg is faster
+                                };
+
+                                function record() {
+                                                console.log('record', video.src);
+                                                frames = [];
+                                                task = requestAnimationFrame(captureFrame);
+                                }
+
+                                function stop() {
+                                                console.log('stop', frames.length);
+                                                cancelAnimationFrame(task);
+                                }
+
+                                function load() {
+                                                video.src = window.URL.createObjectURL(Whammy.fromImageArray(frames, 1000 / 60));
+                                }
+                                
+                                init();
+                </script>
+</body>
+</html>
