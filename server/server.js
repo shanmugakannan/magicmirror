@@ -38,19 +38,21 @@ function Capture(){
 } 
 
 function Recognise() {	
+for (var i = 0; i < 9; i++) {
+    (function(i){
 		   var pyrecognize    = spawn('python',[
 												'../api/recognise.py',
 												'../photo/trainingset', 
-												'./tmp/'+'1'+'.jpg', 
+												'./tmp/'+i+'.jpg', 
 												'1000000.0'
 												]
 									  );
-
 		   pyrecognize.stdout.on('data', function(data){
 				console.log(data.toString());
 				io.emit('chat message', 'from server');
 		   });
+		   })(i)
 		}
-
+}
 
 

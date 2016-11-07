@@ -1,3 +1,3 @@
-python recognise.py C:\Users\snatarajapillai\Desktop\magicmirror\photo\trainingset C:\Users\snatarajapillai\Desktop\magicmirror\photo\input\01.jpg  1000000.0
+python recognise.py C:\snatarajapillai\magicmirror\photo\trainingset C:\snatarajapillai\magicmirror\server\tmp\1.jpg  1000000.0
 
 python eigensave.py C:\Users\snatarajapillai\Desktop\magicmirror\photo\trainingset
